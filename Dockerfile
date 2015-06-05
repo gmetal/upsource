@@ -8,14 +8,15 @@ CMD ["/sbin/my_init"]
 ENV DEBIAN_FRONTEND noninteractive
 RUN echo "debconf shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections
 RUN echo "debconf shared/accepted-oracle-license-v1-1 seen true" | debconf-set-selections
+RUN add-apt-repository -y ppa:webupd8team/java
 # Update apt
-RUN apt-get update && apt-get -y install python-software-properties bzip2 software-properties-common wget unzip openjdk-7-jdk
+RUN apt-get update && apt-get -y install python-software-properties bzip2 software-properties-common wget unzip oracle-java8-installer oracle-java8-set-default
 
 # Download and install upsource
-RUN wget http://download.jetbrains.com/upsource/upsource-1.0.12551.zip  && unzip upsource-1.0.12551.zip  && mv Upsource /usr/local/upsource && rm upsource-1.0.12551.zip
+RUN wget http://download.jetbrains.com/upsource/upsource-2.0.3462.zip  && unzip upsource-2.0.3462.zip  && mv Upsource /usr/local/upsource && rm upsource-2.0.3462.zip
 
 #Export JAVA_HOME and setup hosts 
-ENV JAVA_HOME /usr/lib/jvm/java-1.7.0-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 RUN export PATH=~/bin:$JAVA_HOME/bin:$PATH
 RUN /usr/local/upsource/bin/upsource.sh configure --listen-port 8081
 EXPOSE 8081
